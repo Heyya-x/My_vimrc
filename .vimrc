@@ -27,7 +27,7 @@ noremap H 4h
 noremap L 4l
 noremap P :noh<CR>
 noremap n A<CR><ESC>
-noremap <C-n> n
+noremap M n
 noremap U <C-r>
 noremap <C-h> H
 noremap <C-l> L
@@ -108,6 +108,7 @@ autocmd FileType cpp nnoremap <buffer> E :w<CR> :!g++ -std=c++11 % -o a <CR> :q 
 
 " ################################################## "
 " Plug Setting
+" type :PlugInstall to install
 " ################################################## "
 call plug#begin('~/.vim/plugged')
 
@@ -117,5 +118,9 @@ Plug 'vim-airline/vim-airline-themes'
 
 Plug 'dense-analysis/ale'
 Plug 'preservim/nerdtree'
+
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
+Plug 'preservim/nerdcommenter'
 
 call plug#end()
