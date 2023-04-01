@@ -31,6 +31,8 @@ noremap M n
 noremap U <C-r>
 noremap <C-h> H
 noremap <C-l> L
+" copy to system
+noremap T :%y+<CR>
 
 
 " ################################################## "
@@ -58,7 +60,7 @@ let NERDTreeMapCloserDir = "n"
 " ################################################## "
 
 " C++ template
-autocmd BufNewFile *.cpp 0r /Users/Heyya/CFPG/.template.cpp
+autocmd BufNewFile *.cpp 0r ~/.template.cpp
 autocmd BufNewFile *.cpp exec ":call SetTitle()"
 autocmd BufNewFile *.cpp exec ":call Start()"
 highlight LineNr ctermfg=grey
@@ -88,7 +90,8 @@ endfunc
 autocmd FileType c nnoremap <buffer> E :w<CR> :!gcc % -o a <CR> :q <CR>
 
 " C++ Compiler
-autocmd FileType cpp nnoremap <buffer> E :w<CR> :!g++ -std=c++11 % -o a <CR> :q <CR>
+let g:ale_cpp_cc_options = "-std=c++17 -Wall" " Use c++17 to dense analysis
+autocmd FileType cpp nnoremap <buffer> E :w<CR> :!g++ -std=c++17 % -o a <CR> :q <CR>
 
 " Python Interpreter
 " autocmd FileType python nnoremap <buffer> <C-i> :!python % <CR>
