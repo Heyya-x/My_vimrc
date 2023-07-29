@@ -108,8 +108,14 @@ autocmd FileType cpp nnoremap <buffer> E :w<CR> :!g++ -std=c++17 % -o a <CR> :q 
 
 " }
 
+func vim-plug()
+	exec ":!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+endfunc
+
 
 " ################################################## "
+" Type the following code to get vim-plug
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 " Plug Setting
 " type :PlugInstall to install
 " ################################################## "
@@ -125,5 +131,12 @@ Plug 'preservim/nerdtree'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 Plug 'preservim/nerdcommenter'
+
+Plug 'lervag/vimtex'
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 call plug#end()
