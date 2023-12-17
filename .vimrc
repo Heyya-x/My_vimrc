@@ -9,20 +9,20 @@
 " !!!ONLY FOR MACOS!!!
 " macOS keylayout switch
 " ################################################## "
-let zh_CN = 'com.apple.inputmethod.SCIM.ITABC'
-let en = 'com.apple.keylayout.ABC'
-func SetCN()
-	call system("im-select com.apple.inputmethod.SCIM.ITABC &")
-endfunc
-
-func SetEN()
-	call system("im-select com.apple.keylayout.ABC &")
-endfunc
-
-autocmd InsertLeave * call SetEN()
-
-" noremap <C-m> :call SetCN()<CR>
-noremap <C-m> :call SetEN()<CR>i$$<Esc>F$a
+" let zh_CN = 'com.apple.inputmethod.SCIM.ITABC'
+" let en = 'com.apple.keylayout.ABC'
+" func SetCN()
+" 	call system("im-select com.apple.inputmethod.SCIM.ITABC &")
+" endfunc
+" 
+" func SetEN()
+" 	call system("im-select com.apple.keylayout.ABC &")
+" endfunc
+" 
+" autocmd InsertLeave * call SetEN()
+" 
+" " noremap <C-m> :call SetCN()<CR>
+" noremap <C-m> :call SetEN()<CR>i$$<Esc>F$a
 
 
 
@@ -37,9 +37,9 @@ let NERDTreeMapCloserDir = "n"
 " ################################################## "
 " VimTeX Setting
 " ################################################## "
-filetype plugin indent on
-let g:tex_flavor = 'xelatex'
-let g:vimtes_quickfix_mode = 0
+" filetype plugin indent on
+" let g:tex_flavor = 'xelatex'
+" let g:vimtes_quickfix_mode = 0
 
 
 
@@ -64,8 +64,53 @@ func SetTitle()
 	call append(0, "/**")
 	call append(1, "  *	 author:  Heyya")
 	call append(2, "  *	 created: ".strftime("%m.%d.%Y %H:%M"))
-	call append(3, "**/")
+	call append(3, "  *  modified: ")
+	call append(4, "**/")
 endfunc
+
+" Update modified date
+func UpdateModifiedDate()
+	if getline(1) =~ '/\*\*'
+		let isFind = search("modified:")
+		if isFind
+			let newLine = "  *	 modified: ".strftime("%m.%d.%Y %H:%M")
+			call setline(4, newLine) 
+		else 
+			let newLine = "  *	 modified: ".strftime("%m.%d.%Y %H:%M")
+			call append(3, newLine) 
+		endif
+	endif 
+endfunction
+
+" Calculate time spent
+func CalculateTimeSpent()
+	if getline(1) =~ '/\*\*'
+		call UpdateModifiedDate()
+
+		let created_line = getline(3)
+		let modified_line = getline(4)
+
+		let created_match = matchlist(created_line, 'created: \(\d\+\.\d\+\.\d\+\s\(\d\+\):\(\d\+\)\)')
+		let modified_match = matchlist(modified_line, 'modified: \(\d\+\.\d\+\.\d\+\s\(\d\+\):\(\d\+\)\)')
+
+		let created_hour = created_match[2]
+		let created_minute = created_match[3]
+
+		let modified_hour = modified_match[2]
+		let modified_minute = modified_match[3]
+		
+		let time = (modified_hour * 60 + modified_minute) - (created_hour * 60 + created_minute)
+
+		let isFind = search("time:")
+		if isFind
+			let newLine = "  *  time: " .time . "min"
+			call setline(5, newLine)
+		else
+			let newLine = "  *  time: " .time . "min"
+			call append(4, newLine)
+		endif
+	endif
+endfunction
 
 " start type
 func Start()
@@ -86,6 +131,7 @@ autocmd FileType c nnoremap <buffer> E :w<CR> :!gcc % -o a<CR> :q <CR>
 
 " C++ Compiler
 autocmd FileType cpp nnoremap <buffer> E :w<CR> :!g++ -std=gnu++17 % -o a <CR> :q <CR>
+autocmd FileType cpp nnoremap <buffer> W :call CalculateTimeSpent() <CR> :w <CR>
 
 " Python Interpreter
 " autocmd FileType python nnoremap <buffer> <C-i> :!python % <CR>
